@@ -1,0 +1,12 @@
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+.bg-joke {
+  background-image: url("../assets/img/bg-joke.webp");
+  background-repeat: no-repeat, repeat;
+  background-size: cover;
+  height: 100vh;
+}
+.bg-card-joke {
+  background-color: rgb(2 2 2 / 85%);
+  min-height: 300px;
+}

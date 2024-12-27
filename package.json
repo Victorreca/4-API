@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sass": "sass --watch ./sass/styles.scss ./css/styles.css",
+    "sass:build": "sass ./sass/styles.scss ./css/styles.css"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,10 @@
   },
   "homepage": "https://github.com/Victorreca/4-API#readme",
   "devDependencies": {
+    "sass": "^1.83.0",
     "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3"
   }
 }
