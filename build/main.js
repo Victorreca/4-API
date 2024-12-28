@@ -8,8 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+const reportJokes = [];
 const showJoke = () => __awaiter(void 0, void 0, void 0, function* () {
     const newJoke = document.getElementById("newJoke");
+    const selectedEmoji = document.querySelector("input[name='emojiRating']:checked");
+    const emojiRating = selectedEmoji ? parseInt(selectedEmoji.value) : null;
     const url = "https://icanhazdadjoke.com/";
     const options = {
         method: "GET",
@@ -20,7 +23,25 @@ const showJoke = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield fetch(url, options);
         const result = yield response.json();
-        newJoke ? (newJoke.textContent = result.joke) : console.log("error");
+        if (newJoke) {
+            newJoke.textContent = result.joke;
+            const currentDate = new Date().toISOString();
+            if (emojiRating) {
+                let joke = {
+                    joke: result.joke,
+                    score: emojiRating,
+                    date: currentDate,
+                };
+                reportJokes.push(joke);
+                console.log(reportJokes);
+                if (selectedEmoji) {
+                    selectedEmoji.checked = false;
+                }
+            }
+        }
+        else {
+            console.log("error");
+        }
     }
     catch (error) {
         console.log("Joke not found", error);

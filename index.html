@@ -19,11 +19,21 @@
                         <div
                             class="col-12 col-md-8 col-xl-6 bg-card-joke py-5 text-white rounded-3 px-5 d-flex justify-content-center flex-column">
                             <div>
-                                <h1>Preparat per riure? 😂</h1>
+                                <h1>Preparat per riure?</h1>
                                 <p class="py-3">
                                     Joke: <span id="newJoke"></span>
                                 </p>
-                                <button type="button" class="btn btn-success" onclick="showJoke()">Next Joke</button>
+                                <h5>Valora l'acudit</h5>
+                                <div class="emoji-rating">
+                                    <input type="radio" id="emoji1" name="emojiRating" value="1">
+                                    <label for="emoji1">😊</label>
+                                    <input type="radio" id="emoji2" name="emojiRating" value="2">
+                                    <label for="emoji2">😁</label>
+                                    <input type="radio" id="emoji3" name="emojiRating" value="3">
+                                    <label for="emoji3">😂</label>
+                                </div>
+                                <button type="button" class="btn btn-success mt-2" onclick="showJoke()">Next
+                                    Joke</button>
                             </div>
                         </div>
                     </div>
