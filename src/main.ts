@@ -7,38 +7,78 @@ const showJoke = async (): Promise<void> => {
 
   const emojiRating = selectedEmoji ? parseInt(selectedEmoji.value) : null;
 
-  const url = "https://icanhazdadjoke.com/";
-  const options = {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-    },
-  };
+  const randomNumber = Math.round(Math.random());
 
-  try {
-    const response = await fetch(url, options);
-    const result = await response.json();
-    if (newJoke) {
-      newJoke.textContent = result.joke;
-      const currentDate = new Date().toISOString();
-      if (emojiRating) {
-        let joke = {
-          joke: result.joke,
-          score: emojiRating,
-          date: currentDate,
-        };
-        reportJokes.push(joke);
-        console.log(reportJokes);
+  if (randomNumber % 2 === 0) {
+    const url = "https://icanhazdadjoke.com/";
+    const options = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    };
 
-        if (selectedEmoji) {
-          selectedEmoji.checked = false;
+    try {
+      const response = await fetch(url, options);
+      const result = await response.json();
+      if (newJoke) {
+        newJoke.textContent = result.joke;
+        const currentDate = new Date().toISOString();
+        if (emojiRating) {
+          let joke = {
+            joke: result.joke,
+            score: emojiRating,
+            date: currentDate,
+          };
+          reportJokes.push(joke);
+          console.log(reportJokes);
+
+          if (selectedEmoji) {
+            selectedEmoji.checked = false;
+          }
         }
+      } else {
+        console.log("error");
       }
-    } else {
-      console.log("error");
+    } catch (error) {
+      console.log("Joke not found", error);
     }
-  } catch (error) {
-    console.log("Joke not found", error);
+  } else {
+    const url = `https://api.chucknorris.io/jokes/random`;
+    const options = {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const result = await response.json();
+
+      if (newJoke) {
+        newJoke.textContent = result.value;
+        const currentDate = new Date().toISOString();
+
+        if (emojiRating) {
+          let joke = {
+            joke: result.value,
+            score: emojiRating,
+            date: currentDate,
+          };
+          reportJokes.push(joke);
+          console.log(reportJokes);
+
+          if (selectedEmoji) {
+            selectedEmoji.checked = false;
+          }
+        }
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 };
 
@@ -85,5 +125,6 @@ const showWheater = async (): Promise<void> => {
     infoMeteo.textContent = "Error al obtenir la informació del clima.";
   }
 };
+
 showWheater();
 showJoke();
