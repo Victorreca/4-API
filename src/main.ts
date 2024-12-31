@@ -84,45 +84,48 @@ const showJoke = async (): Promise<void> => {
 
 const showWheater = async (): Promise<void> => {
   const apiKey = "63328fd6f4579d92c2bfb4a3eb86a02d";
-  const infoMeteo = document.getElementById(
-    "infoMeteo"
-  ) as HTMLSpanElement | null;
-  const infoHumidity = document.getElementById(
-    "infoHumidity"
-  ) as HTMLSpanElement | null;
+  const weatherIcon = document.getElementById(
+    "weatherIcon"
+  ) as HTMLImageElement | null;
+  const infoTemp = document.getElementById("temp") as HTMLSpanElement | null;
+
   const currentTown = document.getElementById(
     "currentTown"
   ) as HTMLSpanElement | null;
 
-  if (!infoMeteo) {
-    console.error("'infoMeteo' doesn't exist.");
+  if (!weatherIcon) {
+    console.error("'weatherIcon' doesn't exist.");
     return;
   }
-  if (!infoHumidity) {
-    console.error("'infoHumidity' doesn't exist.");
+  if (!infoTemp) {
+    console.error("'infoTemp' doesn't exist.");
     return;
   }
+
   if (!currentTown) {
     console.error("currentTown' doesn't exist.");
     return;
   }
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?lat=41.63&lon=2.21&appid=${apiKey}`;
+  //   const url = `https://api.openweathermap.org/data/2.5/weather?lat=16.87&lon=43.21&appid=${apiKey}`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=41.63&lon=2.21&appid=${apiKey}&units=metric`;
 
   try {
     const response = await fetch(url);
     const result = await response.json();
     currentTown.textContent = result.name + ":";
-    const weatherNow = result.weather[0].description;
-    const capitalLetterWeatherNow =
-      weatherNow.charAt(0).toUpperCase() + weatherNow.slice(1);
-    weatherNow;
-    infoMeteo.textContent = capitalLetterWeatherNow;
-    const humidityNow = result.main.humidity;
-    infoHumidity.textContent = humidityNow + "%";
+    const weatherIconCode = result.weather[0].icon;
+    const tempInfo = parseInt(result.main.temp);
+
+    infoTemp.textContent = `${tempInfo}°C`;
+    weatherIcon.src =
+      "https://openweathermap.org/img/wn/" + weatherIconCode + "@2x.png";
+    if (weatherIconCode) {
+      weatherIcon.classList.remove("d-none");
+      weatherIcon.classList.add("d-block");
+    }
   } catch (error) {
     console.error(error);
-    infoMeteo.textContent = "Error al obtenir la informació del clima.";
   }
 };
 
