@@ -9,80 +9,67 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const reportJokes = [];
+const shapes = ["shape1", "shape2", "shape3"];
+let currentShapeIndex = 0;
+const changeContainerShape = () => {
+    const containerShape = document.getElementById("jokeContainer");
+    containerShape === null || containerShape === void 0 ? void 0 : containerShape.classList.remove(shapes[currentShapeIndex]);
+    if (currentShapeIndex < shapes.length - 1) {
+        currentShapeIndex = currentShapeIndex + 1;
+    }
+    else {
+        currentShapeIndex = 0;
+    }
+    containerShape === null || containerShape === void 0 ? void 0 : containerShape.classList.add(shapes[currentShapeIndex]);
+};
 const showJoke = () => __awaiter(void 0, void 0, void 0, function* () {
     const newJoke = document.getElementById("newJoke");
     const selectedEmoji = document.querySelector("input[name='emojiRating']:checked");
     const emojiRating = selectedEmoji ? parseInt(selectedEmoji.value) : null;
     const randomNumber = Math.round(Math.random());
-    if (randomNumber % 2 === 0) {
-        const url = "https://icanhazdadjoke.com/";
-        const options = {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-            },
-        };
-        try {
+    const options = {
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+        },
+    };
+    try {
+        let jokeText = "";
+        if (randomNumber % 2 === 0) {
+            const url = "https://icanhazdadjoke.com/";
             const response = yield fetch(url, options);
             const result = yield response.json();
-            if (newJoke) {
-                newJoke.textContent = result.joke;
-                const currentDate = new Date().toISOString();
-                if (emojiRating) {
-                    let joke = {
-                        joke: result.joke,
-                        score: emojiRating,
-                        date: currentDate,
-                    };
-                    reportJokes.push(joke);
-                    console.log(reportJokes);
-                    if (selectedEmoji) {
-                        selectedEmoji.checked = false;
-                    }
+            jokeText = result.joke;
+        }
+        else {
+            const url = `https://api.chucknorris.io/jokes/random`;
+            const response = yield fetch(url, options);
+            const result = yield response.json();
+            jokeText = result.value;
+        }
+        if (newJoke) {
+            newJoke.textContent = jokeText;
+            const currentDate = new Date().toISOString();
+            if (emojiRating) {
+                let joke = {
+                    joke: jokeText,
+                    score: emojiRating,
+                    date: currentDate,
+                };
+                reportJokes.push(joke);
+                console.log(reportJokes);
+                if (selectedEmoji) {
+                    selectedEmoji.checked = false;
                 }
             }
-            else {
-                console.log("error");
-            }
         }
-        catch (error) {
-            console.log("Joke not found", error);
+        else {
+            console.log("error");
         }
+        changeContainerShape();
     }
-    else {
-        const url = `https://api.chucknorris.io/jokes/random`;
-        const options = {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-            },
-        };
-        try {
-            const response = yield fetch(url, options);
-            const result = yield response.json();
-            if (newJoke) {
-                newJoke.textContent = result.value;
-                const currentDate = new Date().toISOString();
-                if (emojiRating) {
-                    let joke = {
-                        joke: result.value,
-                        score: emojiRating,
-                        date: currentDate,
-                    };
-                    reportJokes.push(joke);
-                    console.log(reportJokes);
-                    if (selectedEmoji) {
-                        selectedEmoji.checked = false;
-                    }
-                }
-            }
-            else {
-                console.log("error");
-            }
-        }
-        catch (error) {
-            console.error(error);
-        }
+    catch (error) {
+        console.log("Joke not found", error);
     }
 });
 const showWheater = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -90,19 +77,10 @@ const showWheater = () => __awaiter(void 0, void 0, void 0, function* () {
     const weatherIcon = document.getElementById("weatherIcon");
     const infoTemp = document.getElementById("temp");
     const currentTown = document.getElementById("currentTown");
-    if (!weatherIcon) {
-        console.error("'weatherIcon' doesn't exist.");
+    if (!weatherIcon || !infoTemp || !currentTown) {
+        console.error("One or more required DOM elements don't exist");
         return;
     }
-    if (!infoTemp) {
-        console.error("'infoTemp' doesn't exist.");
-        return;
-    }
-    if (!currentTown) {
-        console.error("currentTown' doesn't exist.");
-        return;
-    }
-    //   const url = `https://api.openweathermap.org/data/2.5/weather?lat=16.87&lon=43.21&appid=${apiKey}`;
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=41.63&lon=2.21&appid=${apiKey}&units=metric`;
     try {
         const response = yield fetch(url);

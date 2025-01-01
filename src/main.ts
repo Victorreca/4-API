@@ -1,4 +1,21 @@
 const reportJokes: Array<{ joke: string; score: number; date: string }> = [];
+
+const shapes = ["shape1", "shape2", "shape3"];
+let currentShapeIndex = 0;
+
+const changeContainerShape = (): void => {
+  const containerShape = document.getElementById("jokeContainer");
+
+  containerShape?.classList.remove(shapes[currentShapeIndex]);
+
+  if (currentShapeIndex < shapes.length - 1) {
+    currentShapeIndex = currentShapeIndex + 1;
+  } else {
+    currentShapeIndex = 0;
+  }
+  containerShape?.classList.add(shapes[currentShapeIndex]);
+};
+
 const showJoke = async (): Promise<void> => {
   const newJoke = document.getElementById("newJoke");
   const selectedEmoji = document.querySelector(
@@ -8,77 +25,49 @@ const showJoke = async (): Promise<void> => {
   const emojiRating = selectedEmoji ? parseInt(selectedEmoji.value) : null;
 
   const randomNumber = Math.round(Math.random());
+  const options = {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+    },
+  };
 
-  if (randomNumber % 2 === 0) {
-    const url = "https://icanhazdadjoke.com/";
-    const options = {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    };
-
-    try {
+  try {
+    let jokeText = "";
+    if (randomNumber % 2 === 0) {
+      const url = "https://icanhazdadjoke.com/";
       const response = await fetch(url, options);
       const result = await response.json();
-      if (newJoke) {
-        newJoke.textContent = result.joke;
-        const currentDate = new Date().toISOString();
-        if (emojiRating) {
-          let joke = {
-            joke: result.joke,
-            score: emojiRating,
-            date: currentDate,
-          };
-          reportJokes.push(joke);
-          console.log(reportJokes);
-
-          if (selectedEmoji) {
-            selectedEmoji.checked = false;
-          }
-        }
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("Joke not found", error);
-    }
-  } else {
-    const url = `https://api.chucknorris.io/jokes/random`;
-    const options = {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    };
-
-    try {
+      jokeText = result.joke;
+    } else {
+      const url = `https://api.chucknorris.io/jokes/random`;
       const response = await fetch(url, options);
       const result = await response.json();
-
-      if (newJoke) {
-        newJoke.textContent = result.value;
-        const currentDate = new Date().toISOString();
-
-        if (emojiRating) {
-          let joke = {
-            joke: result.value,
-            score: emojiRating,
-            date: currentDate,
-          };
-          reportJokes.push(joke);
-          console.log(reportJokes);
-
-          if (selectedEmoji) {
-            selectedEmoji.checked = false;
-          }
-        }
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.error(error);
+      jokeText = result.value;
     }
+    if (newJoke) {
+      newJoke.textContent = jokeText;
+      const currentDate = new Date().toISOString();
+
+      if (emojiRating) {
+        let joke = {
+          joke: jokeText,
+          score: emojiRating,
+          date: currentDate,
+        };
+        reportJokes.push(joke);
+        console.log(reportJokes);
+
+        if (selectedEmoji) {
+          selectedEmoji.checked = false;
+        }
+      }
+    } else {
+      console.log("error");
+    }
+    changeContainerShape();
+  } catch (error) {
+    console.log("Joke not found", error);
   }
 };
 
@@ -93,21 +82,11 @@ const showWheater = async (): Promise<void> => {
     "currentTown"
   ) as HTMLSpanElement | null;
 
-  if (!weatherIcon) {
-    console.error("'weatherIcon' doesn't exist.");
-    return;
-  }
-  if (!infoTemp) {
-    console.error("'infoTemp' doesn't exist.");
+  if (!weatherIcon || !infoTemp || !currentTown) {
+    console.error("One or more required DOM elements don't exist");
     return;
   }
 
-  if (!currentTown) {
-    console.error("currentTown' doesn't exist.");
-    return;
-  }
-
-  //   const url = `https://api.openweathermap.org/data/2.5/weather?lat=16.87&lon=43.21&appid=${apiKey}`;
   const url = `https://api.openweathermap.org/data/2.5/weather?lat=41.63&lon=2.21&appid=${apiKey}&units=metric`;
 
   try {

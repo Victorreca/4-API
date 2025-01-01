@@ -9,14 +9,30 @@ h1 {
   background-size: cover;
   height: 100vh;
 }
-.bg-card-joke {
-  background-image: url("../assets/img/blob-pattern.png");
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-
-  padding: 20px;
+.shape {
+  &1 {
+    background-image: url("../assets/img/blob-pattern.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    padding: 20px;
+  }
+  &2 {
+    background-image: url("../assets/img/blob-pattern-red.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    padding: 20px;
+  }
+  &3 {
+    background-image: url("../assets/img/blob-pattern-blue.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    padding: 20px;
+  }
 }
+
 .emoji-rating {
   display: flex;
   justify-content: center;
@@ -58,7 +74,7 @@ img#weatherIcon {
   display: block;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
   h1 {
     font-size: 28px;
   }

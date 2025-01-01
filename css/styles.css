@@ -11855,8 +11855,22 @@ h1, .h1 {
   height: 100vh;
 }
 
-.bg-card-joke {
+.shape1 {
   background-image: url("../assets/img/blob-pattern.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  padding: 20px;
+}
+.shape2 {
+  background-image: url("../assets/img/blob-pattern-red.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  padding: 20px;
+}
+.shape3 {
+  background-image: url("../assets/img/blob-pattern-blue.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -11904,7 +11918,7 @@ img#weatherIcon {
   display: block;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 992px) {
   h1, .h1 {
     font-size: 28px;
   }
